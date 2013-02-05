@@ -6,7 +6,7 @@ long_description = open(os.path.join(os.path.dirname(__file__), "README.md")).re
 
 setup(
     name="pdfparanoia",
-    version="0.0.3",
+    version="0.0.4",
     url="https://github.com/kanzure/pdfparanoia",
     license="BSD",
     author="Bryan Bishop",
