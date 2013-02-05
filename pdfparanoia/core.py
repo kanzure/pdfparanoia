@@ -12,7 +12,8 @@ import inspect
 
 from .parser import parse_pdf
 from .plugin import Plugin
-from .plugins import *
+
+from pdfparanoia.plugins import *
 
 def find_plugins():
     """
