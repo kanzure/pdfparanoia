@@ -4,9 +4,14 @@ import os
 
 long_description = open(os.path.join(os.path.dirname(__file__), "README.md")).read()
 
+packages = [
+    "pdfparanoia",
+    "pdfparanoia.plugins",
+]
+
 setup(
     name="pdfparanoia",
-    version="0.0.4",
+    version="0.0.5",
     url="https://github.com/kanzure/pdfparanoia",
     license="BSD",
     author="Bryan Bishop",
