@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name="pdfparanoia",
-    version="0.0.1",
+    version="0.0.2",
     url="https://github.com/kanzure/pdfparanoia",
     license="BSD",
     author="Bryan Bishop",
@@ -11,8 +11,9 @@ setup(
     description="pdf watermark remover library for academic papers",
     long_description=open("README.md", "r").read(),
     packages=["pdfparanoia"],
-    zip_safe=False,
+    package_data={'': ['README.md']},
     include_package_data=True,
+    zip_safe=False,
     install_requires=["pdfminer>=0", "pdfquery>=0"],
     platforms="any",
     classifiers=[
