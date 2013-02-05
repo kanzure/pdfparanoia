@@ -12,6 +12,6 @@ clean:
 install:
 	python2.7 setup.py install
 
-upload:
+upload: clean
 	python2.7 setup.py sdist upload
 
