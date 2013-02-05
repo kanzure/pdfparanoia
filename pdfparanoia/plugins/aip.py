@@ -35,12 +35,15 @@ class AmericanInstituteOfPhysics(Plugin):
             if hasattr(obj, "attrs"):
                 # watermarks tend to be in FlateDecode elements
                 if obj.attrs.has_key("Filter") and str(obj.attrs["Filter"]) == "/FlateDecode":
-                    #length = obj.attrs["Length"]
-                    #rawdata = copy(obj.rawdata)
-                    data = copy(obj.get_data())
+                    length = obj.attrs["Length"]
 
-                    if "Redistribution subject to AIP license or copyright" in data:
-                        evil_ids.append(objid)
+                    # the watermark is never very long
+                    if length < 1000:
+                        #rawdata = copy(obj.rawdata)
+                        data = copy(obj.get_data())
+
+                        if "Redistribution subject to AIP license or copyright" in data:
+                            evil_ids.append(objid)
 
         for objid in evil_ids:
             content = remove_object_by_id(content, objid)
