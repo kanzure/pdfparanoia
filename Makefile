@@ -10,8 +10,8 @@ clean:
 	find . -type f -name "*.pyc" -exec rm '{}' \;
 
 install:
-	python setup.py install
+	python2.7 setup.py install
 
 upload:
-	python setup.py sdist upload
+	python2.7 setup.py sdist upload
 
