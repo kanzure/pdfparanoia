@@ -1,19 +1,21 @@
 # -*- coding: utf-8 -*-
 from setuptools import setup
+import os
+
+long_description = open(os.path.join(os.path.dirname(__file__), "README.md")).read()
 
 setup(
     name="pdfparanoia",
-    version="0.0.2",
+    version="0.0.3",
     url="https://github.com/kanzure/pdfparanoia",
     license="BSD",
     author="Bryan Bishop",
     author_email="kanzure@gmail.com",
+    maintainer="Bryan Bishop",
+    maintainer_email="kanzure@gmail.com",
     description="pdf watermark remover library for academic papers",
-    long_description=open("README.md", "r").read(),
+    long_description=long_description,
     packages=["pdfparanoia"],
-    package_data={'': ['README.md']},
-    include_package_data=True,
-    zip_safe=False,
     install_requires=["pdfminer>=0", "pdfquery>=0"],
     platforms="any",
     classifiers=[
