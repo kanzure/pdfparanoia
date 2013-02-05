@@ -41,7 +41,6 @@ class IEEEXplore(Plugin):
                         evil_ids.append(objid)
 
         for objid in evil_ids:
-            print "evil id: " + str(objid)
             content = remove_object_by_id(content, objid)
 
         return content
