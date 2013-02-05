@@ -18,7 +18,7 @@ def remove_object_by_id(content, objid):
     for line in lines:
         if not skip_mode:
             if last_line in ["endobj", None]:
-                if line[-3:] == "obj":
+                if line[-3:] == "obj" or " obj<<" in line[0:50]:
                     if line.startswith(str(objid) + " "):
                         skip_mode = True
                         last_line = line

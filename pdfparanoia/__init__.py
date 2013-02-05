@@ -7,7 +7,7 @@ pdfparanoia is a pdf watermark remover library for academic papers. Basic
 usage:
 
     >>> import pdfparanoia
-    >>> pdf = pdfparanoia.scrub(open("nmat91417.pdf", "r"))
+    >>> pdf = pdfparanoia.scrub(open("nmat.pdf", "r"))
     >>> file_handler = open("output.pdf", "w")
     >>> file_handler.write(pdf)
     >>> file_handler.close()
@@ -17,8 +17,8 @@ usage:
 """
 
 __title__ = "pdfparanoia"
-__version__ = "0.0.7"
-__build__ = 0x000007
+__version__ = "0.0.8"
+__build__ = 0x000008
 __author__ = "Bryan Bishop <kanzure@gmail.com>"
 __license__ = "BSD"
 __copyright__ = "Copyright 2013 Bryan Bishop"
