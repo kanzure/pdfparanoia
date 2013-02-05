@@ -1,0 +1,12 @@
+# ignore editor leftovers
+.*.sw*
+.*~
+*~
+
+# ignore precompiled python files
+*.pyc
+
+# ignore setup stuff
+build/
+dist/
+pdfparanoia.egg-info/
