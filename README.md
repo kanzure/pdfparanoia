@@ -30,6 +30,7 @@ file_handler.close()
 
 ## Changelog
 
+* 0.0.8 - ieee support
 * 0.0.1 - initial commit
 
 ## License
