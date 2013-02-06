@@ -10,3 +10,6 @@
 build/
 dist/
 pdfparanoia.egg-info/
+
+# ignore pdfs in the top-level dir
+/*.pdf
