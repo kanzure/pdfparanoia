@@ -1,6 +1,6 @@
 # pdfparanoia
 
-pdfparanoia is a PDF watermark remover library for academic papers.
+pdfparanoia is a PDF watermark removal library for academic papers.
 
 ## Installing
 
