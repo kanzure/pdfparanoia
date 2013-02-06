@@ -28,11 +28,17 @@ file_handler.write(pdf)
 file_handler.close()
 ```
 
+## Supported
+
+* AIP
+* IEEE
+* JSTOR
+
 ## Changelog
 
+* 0.0.10 - JSTOR
 * 0.0.9 - AIP: better checks for false-positives; IEEE: remove stdout garbage.
-* 0.0.8 - ieee support
-* 0.0.1 - initial commit
+* 0.0.8 - IEEE
 
 ## License
 
