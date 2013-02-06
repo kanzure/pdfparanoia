@@ -23,7 +23,7 @@ setup(
     description="pdf watermark remover library for academic papers",
     long_description=long_description,
     packages=packages,
-    install_requires=["pdfminer>=0", "pdfquery>=0"],
+    install_requires=["pdfminer>=0"],
     platforms="any",
     zip_safe=False,
     classifiers=[
