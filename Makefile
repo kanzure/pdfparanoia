@@ -4,10 +4,10 @@ test:
 	nosetests-2.7 -s --verbosity=2
 
 clean:
-	rm -fr build/
-	rm -fr dist/
+	rm -fr build dist
 	rm -fr *.egg-info
-	find . -type f -name "*.pyc" -exec rm '{}' \;
+	find . -name *.pyc -exec rm {} \;
+	find . -name *.swp -exec rm {} \;
 
 install:
 	python2.7 setup.py install
