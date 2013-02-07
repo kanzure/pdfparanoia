@@ -10,7 +10,11 @@ This module provides most of the heavy lifting of pdfparanoia.
 import sys
 import inspect
 
-from .parser import parse_pdf
+from .parser import (
+    parse_pdf,
+    parse_content,
+)
+
 from .plugin import Plugin
 
 from pdfparanoia.plugins import *
