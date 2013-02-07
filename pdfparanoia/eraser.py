@@ -21,7 +21,7 @@ def manipulate_pdf(content, objid, callback, *args):
     for line in lines:
         if not skip_mode:
             if last_line in ["endobj", "endobj ", None]:
-                if line[-3:] == "obj" or line[-4:] == "obj " or " obj<<" in line[0:50]:
+                if line[-3:] == "obj" or line[-4:] == "obj " or " obj <<" in line[0:50] or " obj<<" in line[0:50]:
                     if line.startswith(str(objid) + " "):
                         skip_mode = True
                         last_line = line
