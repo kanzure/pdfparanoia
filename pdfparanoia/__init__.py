@@ -25,3 +25,5 @@ __copyright__ = "Copyright 2013 Bryan Bishop"
 
 from . import utils
 from .core import scrub
+from .parser import deflate
+
