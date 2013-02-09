@@ -24,6 +24,7 @@ setup(
     long_description=long_description,
     packages=packages,
     install_requires=["pdfminer>=0"],
+    scripts=["bin/pdfparanoia"],
     platforms="any",
     zip_safe=False,
     classifiers=[

@@ -1,0 +1,28 @@
+#!/usr/bin/env python2.7
+# -*- coding: utf-8 -*-
+"""
+pdfparanoia - pdf watermark removal tool
+
+This is the command-line client. It accepts pdf formatted data either through
+stdin/piping or by referencing a file in argv[0].
+"""
+
+
+if __name__ == "__main__":
+    import sys
+    import fileinput
+    from StringIO import StringIO
+
+    import pdfparanoia
+
+    # read in all lines
+    content = ""
+    for line in fileinput.input():
+        content += line
+
+    # scrub the pdf to get rid of watermarks
+    output = pdfparanoia.scrub(StringIO(content))
+
+    # dump to output
+    sys.stdout.write(output)
+
