@@ -28,6 +28,18 @@ file_handler.write(pdf)
 file_handler.close()
 ```
 
+or from the shell,
+
+``` bash
+pdfparanoia input.pdf > output.pdf
+```
+
+and,
+
+``` bash
+cat input.pdf | pdfparanoia > output.pdf
+```
+
 ## Supported
 
 * AIP
