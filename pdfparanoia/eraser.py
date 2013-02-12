@@ -19,6 +19,9 @@ def manipulate_pdf(content, objid, callback, *args):
     last_line = None
     skip_mode = False
     for line in lines:
+        if line == "":
+            outlines.append("")
+            continue
         if not skip_mode:
             if last_line in ["endobj", "endobj ", None]:
                 if line[-3:] == "obj" or line[-4:] == "obj " or " obj <<" in line[0:50] or " obj<<" in line[0:50]:
