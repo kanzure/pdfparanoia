@@ -15,7 +15,7 @@ class IEEEXplore(Plugin):
     """
 
     @classmethod
-    def scrub(cls, content, verbose=False):
+    def scrub(cls, content, verbose=0):
         evil_ids = []
 
         # parse the pdf into a pdfminer document
@@ -40,7 +40,9 @@ class IEEEXplore(Plugin):
 
                     phrase= "Authorized licensed use limited to: "
                     if phrase in data:
-                        if verbose:
+                        if verbose >= 2:
+                            sys.stderr.write("%s: Found object %s with %r: %r; omitting..." % (cls.__name__, objid, phrase, data[data.index(phrase):data.index(phrase)+1000]))
+                        elif verbose >= 1:
                             sys.stderr.write("%s: Found object %s with %r; omitting..." % (cls.__name__, objid, phrase,))
 
                         evil_ids.append(objid)

@@ -13,13 +13,13 @@ if __name__ == "__main__":
     import fileinput
     from StringIO import StringIO
 
-    verbose = False
+    verbose = 0
     while '--verbose' in sys.argv:
-        verbose = True
+        verbose += 1
         sys.argv.pop(sys.argv.index('--verbose'))
 
     while '-v' in sys.argv:
-        verbose = True
+        verbose += 1
         sys.argv.pop(sys.argv.index('-v'))
 
     import pdfparanoia
