@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from copy import copy
+import sys
 
 from ..parser import parse_content
 from ..eraser import remove_object_by_id
@@ -13,8 +14,8 @@ class IEEEXplore(Plugin):
 
     """
 
-    @staticmethod
-    def scrub(content):
+    @classmethod
+    def scrub(cls, content, verbose=False):
         evil_ids = []
 
         # parse the pdf into a pdfminer document
@@ -38,6 +39,9 @@ class IEEEXplore(Plugin):
                     data = copy(obj.get_data())
 
                     if "Authorized licensed use limited to: " in data:
+                        if verbose:
+                            sys.stderr.write("%s: Found object with %r; omitting..." % (cls.__name__, data,))
+
                         evil_ids.append(objid)
 
         for objid in evil_ids:

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from copy import copy
+import sys
 
 from ..parser import parse_content
-from ..eraser import remove_object_by_id
 from ..plugin import Plugin
 
 class SPIE(Plugin):
@@ -18,8 +18,8 @@ class SPIE(Plugin):
 
     """
 
-    @staticmethod
-    def scrub(content):
+    @classmethod
+    def scrub(cls, content, verbose=False):
         evil_ids = []
 
         # parse the pdf into a pdfminer document
@@ -41,6 +41,8 @@ class SPIE(Plugin):
                     data = copy(obj.get_data())
 
                     if "Downloaded From:" in data:
+                        if verbose:
+                            sys.stderr.write("%s: found object with %r; omitting..." % (cls.__name__, data))
                         evil_ids.append(objid)
 
         for objid in evil_ids:

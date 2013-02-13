@@ -2,9 +2,10 @@
 
 from copy import copy
 
+import sys
+
 from ..parser import parse_content
 from ..eraser import (
-    remove_object_by_id,
     replace_object_with,
 )
 from ..plugin import Plugin
@@ -32,8 +33,8 @@ class JSTOR(Plugin):
         "This content downloaded  on",
     ]
 
-    @staticmethod
-    def scrub(content):
+    @classmethod
+    def scrub(cls, content, verbose=False):
         replacements = []
 
         # jstor has certain watermarks only on the first page
@@ -54,8 +55,6 @@ class JSTOR(Plugin):
 
             if hasattr(obj, "attrs"):
                 if obj.attrs.has_key("Filter") and str(obj.attrs["Filter"]) == "/FlateDecode":
-                    length = obj.attrs["Length"]
-                    rawdata = copy(obj.rawdata)
                     data = copy(obj.get_data())
 
                     # make sure all of the requirements are in there
@@ -82,6 +81,10 @@ class JSTOR(Plugin):
                         if page_id == 0 and "/F2 11 Tf\n" in better_content:
                             startpos = better_content.rfind("/F2 11 Tf\n")
                             endpos = better_content.find("Tf\n", startpos+5)
+
+                            if verbose:
+                                sys.stderr.write("%s: Found object with %r; omitting..." % (cls.__name__, better_content[startpos:endpos],))
+
                             better_content = better_content[0:startpos] + better_content[endpos:]
 
                         replacements.append([objid, better_content])
