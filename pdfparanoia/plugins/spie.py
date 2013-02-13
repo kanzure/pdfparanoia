@@ -40,9 +40,10 @@ class SPIE(Plugin):
                 if obj.attrs.has_key("Filter") and str(obj.attrs["Filter"]) == "/FlateDecode":
                     data = copy(obj.get_data())
 
-                    if "Downloaded From:" in data:
+                    phrase="Downloaded From:"
+                    if phrase in data:
                         if verbose:
-                            sys.stderr.write("%s: found object with %r; omitting..." % (cls.__name__, data))
+                            sys.stderr.write("%s: found object %s with %r; omitting..." % (cls.__name__, objid, phrase))
                         evil_ids.append(objid)
 
         for objid in evil_ids:

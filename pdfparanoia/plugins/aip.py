@@ -44,9 +44,10 @@ class AmericanInstituteOfPhysics(Plugin):
                         #rawdata = copy(obj.rawdata)
                         data = copy(obj.get_data())
 
-                        if "Redistribution subject to AIP license or copyright" in data:
+                        phrase="Redistribution subject to AIP license or copyright"
+                        if phrase in data:
                             if verbose:
-                                sys.stderr.write("%s: Found object with %r; omitting..." % (cls.__name__, data,))
+                                sys.stderr.write("%s: Found object %s with %r; omitting..." % (cls.__name__, objid, phrase,))
 
                             evil_ids.append(objid)
 

@@ -61,6 +61,9 @@ class JSTOR(Plugin):
                     if all([requirement in data for requirement in JSTOR.requirements]):
                         better_content = data
 
+                        if verbose:
+                            sys.stderr.write("%s: Found object %s with %r; omitting..." % (cls.__name__, objid, cls.requirements))
+
                         # remove the date
                         startpos = better_content.find("This content downloaded ")
                         endpos = better_content.find(")", startpos)
@@ -81,9 +84,6 @@ class JSTOR(Plugin):
                         if page_id == 0 and "/F2 11 Tf\n" in better_content:
                             startpos = better_content.rfind("/F2 11 Tf\n")
                             endpos = better_content.find("Tf\n", startpos+5)
-
-                            if verbose:
-                                sys.stderr.write("%s: Found object with %r; omitting..." % (cls.__name__, better_content[startpos:endpos],))
 
                             better_content = better_content[0:startpos] + better_content[endpos:]
 
