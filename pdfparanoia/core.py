@@ -32,7 +32,7 @@ def find_plugins():
     plugins = [each[1] for each in plugins]
     return plugins
 
-def scrub(obj):
+def scrub(obj, verbose=False):
     """
     Removes watermarks from a pdf and returns the resulting pdf as a string.
     """
@@ -50,7 +50,7 @@ def scrub(obj):
 
     # clean this pdf as much as possible
     for plugin in plugins:
-        content = plugin.scrub(content)
+        content = plugin.scrub(content, verbose=verbose)
 
     return content
 

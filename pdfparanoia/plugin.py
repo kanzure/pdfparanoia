@@ -8,8 +8,8 @@ Defines how plugins work.
 """
 
 class Plugin:
-    @staticmethod
-    def scrub(content):
+    @classmethod
+    def scrub(cls, content, verbose=False):
         """
         Removes watermarks from the given pdf.
         """

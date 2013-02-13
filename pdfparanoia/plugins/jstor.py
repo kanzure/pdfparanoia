@@ -2,9 +2,10 @@
 
 from copy import copy
 
+import sys
+
 from ..parser import parse_content
 from ..eraser import (
-    remove_object_by_id,
     replace_object_with,
 )
 from ..plugin import Plugin
@@ -32,8 +33,8 @@ class JSTOR(Plugin):
         "This content downloaded  on",
     ]
 
-    @staticmethod
-    def scrub(content):
+    @classmethod
+    def scrub(cls, content, verbose=0):
         replacements = []
 
         # jstor has certain watermarks only on the first page
@@ -54,8 +55,6 @@ class JSTOR(Plugin):
 
             if hasattr(obj, "attrs"):
                 if obj.attrs.has_key("Filter") and str(obj.attrs["Filter"]) == "/FlateDecode":
-                    length = obj.attrs["Length"]
-                    rawdata = copy(obj.rawdata)
                     data = copy(obj.get_data())
 
                     # make sure all of the requirements are in there
@@ -66,6 +65,9 @@ class JSTOR(Plugin):
                         startpos = better_content.find("This content downloaded ")
                         endpos = better_content.find(")", startpos)
                         segment = better_content[startpos:endpos]
+                        if verbose >= 2 and replacements:
+                            sys.stderr.write("%s: Found object %s with %r: %r; omitting..." % (cls.__name__, objid, cls.requirements, segment))
+
                         better_content = better_content.replace(segment, "")
 
                         # it looks like all of the watermarks are at the end?
@@ -82,11 +84,18 @@ class JSTOR(Plugin):
                         if page_id == 0 and "/F2 11 Tf\n" in better_content:
                             startpos = better_content.rfind("/F2 11 Tf\n")
                             endpos = better_content.find("Tf\n", startpos+5)
+
+                            if verbose >= 2 and replacements:
+                                sys.stderr.write("%s: Found object %s with %r: %r; omitting..." % (cls.__name__, objid, cls.requirements, better_content[startpos:endpos]))
+
                             better_content = better_content[0:startpos] + better_content[endpos:]
 
                         replacements.append([objid, better_content])
 
                         page_id += 1
+
+        if verbose >= 1 and replacements:
+            sys.stderr.write("%s: Found objects %s with %r; omitting..." % (cls.__name__, [deets[0] for deets in replacements], cls.requirements))
 
         for deets in replacements:
             objid = deets[0]
