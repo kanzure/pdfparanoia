@@ -1,6 +1,6 @@
 # pdfparanoia
 
-pdfparanoia is a PDF watermark removal library for academic papers.
+pdfparanoia is a PDF watermark removal library for academic papers. Some publishers include private information like institution names, personal names, ip addresses, timestamps and other identifying information in watermarks on each page.
 
 ## Installing
 
@@ -31,7 +31,7 @@ file_handler.close()
 or from the shell,
 
 ``` bash
-pdfparanoia input.pdf > output.pdf
+pdfparanoia --verbose input.pdf > output.pdf
 ```
 
 and,
