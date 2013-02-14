@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import sys
+
 from copy import copy
 
 from ..parser import parse_content
@@ -15,8 +17,8 @@ class AmericanInstituteOfPhysics(Plugin):
     attached for whatever reason.
     """
 
-    @staticmethod
-    def scrub(content):
+    @classmethod
+    def scrub(cls, content, verbose=0):
         evil_ids = []
 
         # parse the pdf into a pdfminer document
@@ -42,7 +44,13 @@ class AmericanInstituteOfPhysics(Plugin):
                         #rawdata = copy(obj.rawdata)
                         data = copy(obj.get_data())
 
-                        if "Redistribution subject to AIP license or copyright" in data:
+                        phrase="Redistribution subject to AIP license or copyright"
+                        if phrase in data:
+                            if verbose >= 2:
+                                sys.stderr.write("%s: Found object %s with %r: %r; omitting..." % (cls.__name__, objid, phrase, data))
+                            elif verbose >= 1:
+                                sys.stderr.write("%s: Found object %s with %r; omitting..." % (cls.__name__, objid, phrase,))
+
                             evil_ids.append(objid)
 
         for objid in evil_ids:
