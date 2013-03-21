@@ -16,6 +16,9 @@ or,
 sudo python setup.py install
 ```
 
+pdfparanoia is written for python2.7+ or python 3.
+You will also need to manually install "pdfminer" if you do not use pip to install pdfparanoia.
+
 ## Usage
 
 ``` python
@@ -23,15 +26,14 @@ import pdfparanoia
 
 pdf = pdfparanoia.scrub(open("nmat91417.pdf", "rb"))
 
-file_handler = open("output.pdf", "wb")
-file_handler.write(pdf)
-file_handler.close()
+with open("output.pdf", "wb") as file_handler:
+    file_handler.write(pdf)
 ```
 
 or from the shell,
 
 ``` bash
-pdfparanoia --verbose input.pdf > output.pdf
+pdfparanoia --verbose input.pdf -o output.pdf
 ```
 
 and,
