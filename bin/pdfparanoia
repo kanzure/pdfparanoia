@@ -10,28 +10,29 @@ stdin/piping or by referencing a file in argv[0].
 
 if __name__ == "__main__":
     import sys
-    import fileinput
+    import pdfparanoia
+    import argparse
     from StringIO import StringIO
 
+    ArgP = argparse.ArgumentParser(description="pdfparanoia is a PDF watermark removal library for academic papers. Some publishers include private information like institution names, personal names, ip addresses, timestamps and other identifying information in watermarks on each page.")
+    ArgP.add_argument('in_pdf', nargs='?', type=argparse.FileType('rb'),
+                        default='-') # argparse.FileType interprets "-" as Stdin.
+    ArgP.add_argument("-o", "--output", type=argparse.FileType('wb'),
+                        default=sys.stdout)
+    ArgP.add_argument("-v", "--verbose", action="store_true", default=False,
+                      help="Output more information, which may be sensitive or excessive.")
+    ArgP.add_argument("-V", "--more-verbose", action="store_true", default=False,
+                      help="Output even more information. Implies -v.")
+    Args = ArgP.parse_args()
+
     verbose = 0
-    while '--verbose' in sys.argv:
-        verbose += 1
-        sys.argv.pop(sys.argv.index('--verbose'))
+    if Args.verbose: verbose = 1
+    if Args.more_verbose: verbose = 2
 
-    while '-v' in sys.argv:
-        verbose += 1
-        sys.argv.pop(sys.argv.index('-v'))
-
-    import pdfparanoia
-
-    # read in all lines
-    content = ""
-    for line in fileinput.input():
-        content += line
-
-    # scrub the pdf to get rid of watermarks
-    output = pdfparanoia.scrub(StringIO(content), verbose=verbose)
-
-    # dump to output
-    sys.stdout.write(output)
-
+    # I really don't like having to read a file only to cast as StringIO, but seems
+    # necessary to get reading from StdIn to play nicely with pdfparanoia.
+    outputcontent = pdfparanoia.scrub(StringIO(Args.in_pdf.read()), verbose=verbose)
+    Args.in_pdf.close()
+    Args.output.write(outputcontent)
+    if Args.output != sys.stdout:
+        Args.output.close()
