@@ -1,3 +1,4 @@
+#!/bin/bash
 if [ "$#" != "2" ]; then
 	echo "Please supply the addresses of two SOCKS proxies:"
 	echo "compare host1:port1 host2:port2"
