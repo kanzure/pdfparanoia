@@ -15,4 +15,4 @@ pdfparanoia.egg-info/
 /*.pdf
 
 # temporary pdfs in tests/diff/
-tests/diff/*.pdf
+tests/diff/pdf
