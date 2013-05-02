@@ -13,3 +13,6 @@ pdfparanoia.egg-info/
 
 # ignore pdfs in the top-level dir
 /*.pdf
+
+# temporary pdfs in tests/diff/
+tests/diff/*.pdf

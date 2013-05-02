@@ -1,0 +1,23 @@
+for url in `cat urls`; do
+	echo "Retrieving $url";
+	# TODO allow customizing the proxies, or more generally the retrieval mechanisms
+	# TODO allow local caching
+	curl --socks localhost:1080 $url > 1.pdf
+	curl --socks localhost:1083 $url > 2.pdf
+	# TODO verify that we actually obtained pdfs
+	if diff 1.pdf 2.pdf; then
+		echo "PDFs are identical already, no need to use pdfparanoia"
+	else
+		cat 1.pdf | pdfparanoia > 1.cleaned.pdf
+		cat 2.pdf | pdfparanoia > 2.cleaned.pdf
+		if diff 1.cleaned.pdf 2.cleaned.pdf; then
+			echo "pdfparanoia successful scrubbed the PDFs"
+		else
+			echo "pdfparanoia failed!"
+		fi
+		rm 1.cleaned.pdf
+		rm 2.cleaned.pdf
+	fi
+	rm 1.pdf
+	rm 2.pdf
+done
