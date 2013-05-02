@@ -1,0 +1,69 @@
+#!/bin/bash
+if [ "$#" != "2" ]; then
+	echo "Please supply the addresses of two SOCKS proxies:"
+	echo "compare host1:port1 host2:port2"
+	exit 1
+fi
+
+proxy1="$1"
+proxy2="$2"
+
+curl -s --socks $proxy1 http://google.com | grep "The document has moved" > /dev/null
+if [ "$?" != "0" ]; then
+	echo "SOCKS proxy $proxy1 doesn't seem to be working."
+	exit 2
+fi
+curl -s --socks $proxy2 http://google.com | grep "The document has moved" > /dev/null
+if [ "$?" != "0" ]; then
+	echo "SOCKS proxy $proxy2 doesn't seem to be working."
+	exit 3
+fi
+
+echo "--------------------------------------------------------------------------------------------------------------------------------"
+echo "Comparing PDFs downloaded via '$proxy1' and '$proxy2'"
+echo "Please enter URLs, one per line."
+echo 
+echo "PDFs which still differ after pdfparanoia will be left in the pdf/ subdirectory, with suffixes .1.cleaned.pdf and .2.cleaned.pdf"
+echo "--------------------------------------------------------------------------------------------------------------------------------"
+echo
+
+mkdir -p pdf
+
+while read url; do
+	hash=`echo $url | openssl sha1 | cut -d ' ' -f 2`
+	echo "Retrieving $url, with hash $hash";
+	if [ ! -s pdf/$hash.1.pdf ]; then
+		curl --socks $proxy1 -L --cookie cookie.jar -A "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)" -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" $url > pdf/$hash.1.pdf
+	fi
+	if [ "`head -c 4 pdf/$hash.1.pdf`" == "%PDF" ]; then
+		if [ ! -s pdf/$hash.2.pdf ]; then
+			curl --socks $proxy2 -L --cookie cookie.jar -A "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)" -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" $url > pdf/$hash.2.pdf
+		fi
+		if [ "`head -c 4 pdf/$hash.2.pdf`" == "%PDF" ]; then
+			if cmp -s pdf/$hash.1.pdf pdf/$hash.2.pdf; then
+				echo "PDFs are identical already, no need to use pdfparanoia"
+			else
+				echo "PDFs differ, running pdfparanoia"
+				if [ ! -s pdf/$hash.1.cleaned.pdf ]; then
+					cat pdf/$hash.1.pdf | pdfparanoia > pdf/$hash.1.cleaned.pdf
+				fi
+				if [ ! -s pdf/$hash.2.cleaned.pdf ]; then
+					cat pdf/$hash.2.pdf | pdfparanoia > pdf/$hash.2.cleaned.pdf
+				fi
+				if cmp -s pdf/$hash.1.cleaned.pdf pdf/$hash.2.cleaned.pdf; then
+					echo "pdfparanoia successful scrubbed the PDFs"
+					rm pdf/$hash.*.cleaned.pdf
+				else
+					echo "pdfparanoia failed!"
+				fi
+			fi
+		else
+			echo "Download failed from source 2"
+			rm pdf/$hash.*.pdf
+		fi
+	else
+		echo "Download failed from source 1"
+		rm pdf/$hash.*.pdf
+	fi
+	echo
+done
