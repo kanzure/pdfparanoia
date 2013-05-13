@@ -47,10 +47,12 @@ cat input.pdf | pdfparanoia > output.pdf
 * AIP
 * IEEE
 * JSTOR
+* RSC
 * SPIE (sort of)
 
 ## Changelog
 
+* 0.0.13 - RSC
 * 0.0.12 - SPIE
 * 0.0.11 - pdfparanoia command-line interface. Use it by either piping in pdf data, or specifying a path to a pdf in the first argv slot.
 * 0.0.10 - JSTOR
