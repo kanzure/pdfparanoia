@@ -35,35 +35,38 @@ class RoyalSocietyOfChemistry(Plugin):
             #"Table of Contents for this issue",
         ]
 
-        # parse the pdf into a pdfminer document
-        pdf = parse_content(content)
+        # Confirm the PDF is from the RSC
+        if "pubs.rsc.org" in content:
+            
+            # parse the pdf into a pdfminer document
+            pdf = parse_content(content)
 
-        # get a list of all object ids
-        xrefs = pdf._parser.read_xref()
-        xref = xrefs[0]
-        objids = xref.get_objids()
+            # get a list of all object ids
+            xrefs = pdf._parser.read_xref()
+            xref = xrefs[0]
+            objids = xref.get_objids()
 
-        # check each object in the pdf
-        for objid in objids:
-            # get an object by id
-            obj = pdf.getobj(objid)
+            # check each object in the pdf
+            for objid in objids:
+                # get an object by id
+                obj = pdf.getobj(objid)
 
-            if hasattr(obj, "attrs"):
-                # watermarks tend to be in FlateDecode elements
-                if obj.attrs.has_key("Filter") and str(obj.attrs["Filter"]) == "/FlateDecode":
-                    rawdata = copy(obj.rawdata)
-                    data = copy(obj.get_data())
+                if hasattr(obj, "attrs"):
+                    # watermarks tend to be in FlateDecode elements
+                    if obj.attrs.has_key("Filter") and str(obj.attrs["Filter"]) == "/FlateDecode":
+                        rawdata = copy(obj.rawdata)
+                        data = copy(obj.get_data())
 
-                    # Check if any of the watermarks are in the current object
-                    for phrase in watermarks:
-                        if phrase in data:
-                            if verbose >= 2:
-                                sys.stderr.write("%s: Found object %s with %r: %r; omitting...\n" % (cls.__name__, objid, phrase, data[data.index(phrase):data.index(phrase)+1000]))
-                            elif verbose >= 1:
-                                sys.stderr.write("%s: Found object %s with %r; omitting...\n" % (cls.__name__, objid, phrase)) 
-                            
-                            # We had a match so replace the watermark data with an empty string                 
-                            replacements.append([rawdata, ""])
+                        # Check if any of the watermarks are in the current object
+                        for phrase in watermarks:
+                            if phrase in data:
+                                if verbose >= 2:
+                                    sys.stderr.write("%s: Found object %s with %r: %r; omitting...\n" % (cls.__name__, objid, phrase, data[data.index(phrase):data.index(phrase)+1000]))
+                                elif verbose >= 1:
+                                    sys.stderr.write("%s: Found object %s with %r; omitting...\n" % (cls.__name__, objid, phrase)) 
+                                
+                                # We had a match so replace the watermark data with an empty string                 
+                                replacements.append([rawdata, ""])
             
         for deets in replacements:
             # Directly replace the stream data in binary encoded object
