@@ -1,6 +1,14 @@
 # pdfparanoia
 
-pdfparanoia is a PDF watermark removal library for academic papers. Some publishers include private information like institution names, personal names, ip addresses, timestamps and other identifying information in watermarks on each page.
+pdfparanoia is a PDF watermark removal library for academic papers. Some
+publishers include private information like institution names, personal names,
+ip addresses, timestamps and other identifying information in watermarks on
+each page.
+
+pdfparania это библиотека для удаления водяных знаков из PDF файлов научных
+статей. Некоторые издатели включают личную информацию, такую как названия
+институтов, имена, IP-адреса, время и дату и другую информацию в водяные знаки
+содержащиеся на каждой странице.
 
 ## Installing
 
