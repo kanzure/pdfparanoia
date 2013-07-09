@@ -2,18 +2,11 @@
 from setuptools import setup
 import os
 
-import pdfparanoia
-
 long_description = open(os.path.join(os.path.dirname(__file__), "README.md")).read()
-
-packages = [
-    "pdfparanoia",
-    "pdfparanoia.plugins",
-]
 
 setup(
     name="pdfparanoia",
-    version=pdfparanoia.__version__,
+    version="0.0.13",
     url="https://github.com/kanzure/pdfparanoia",
     license="BSD",
     author="Bryan Bishop",
@@ -22,7 +15,6 @@ setup(
     maintainer_email="kanzure@gmail.com",
     description="pdf watermark remover library for academic papers",
     long_description=long_description,
-    packages=packages,
     install_requires=["pdfminer>=0"],
     scripts=["bin/pdfparanoia"],
     platforms="any",
