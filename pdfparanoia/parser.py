@@ -12,10 +12,7 @@ from StringIO import StringIO
 # Maybe one day pdfquery will be able to save pdf.
 # from pdfquery import PDFQuery
 
-from pdfminer.pdfparser import (
-    PDFParser,
-    PDFDocument,
-)
+import pdfminer.pdfparser
 
 from .eraser import replace_object_with
 
@@ -27,8 +24,8 @@ def parse_pdf(handler):
     handler.seek(0)
 
     # setup for parsing
-    parser = PDFParser(handler)
-    doc = PDFDocument()
+    parser = pdfminer.pdfparser.PDFParser(handler)
+    doc = pdfminer.pdfparser.PDFDocument()
     parser.set_document(doc)
     doc.set_parser(parser)
 
