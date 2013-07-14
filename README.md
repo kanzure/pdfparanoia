@@ -26,6 +26,7 @@ sudo python setup.py install
 
 pdfparanoia is written for python2.7+ or python 3.
 You will also need to manually install "pdfminer" if you do not use pip to install pdfparanoia.
+For python versions prior to Python 3, use "pdfminer" from the Python Package Index (http://pypi.python.org). For recent versions of Python, use pdfminer3k instead.
 
 ## Usage
 
