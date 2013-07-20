@@ -3,6 +3,8 @@ from setuptools import setup
 import os
 import platform
 
+import pdfparanoia
+
 long_description = open(os.path.join(os.path.dirname(__file__), "README.md")).read()
 
 # pdfminer isn't cross-version compatible but a py3k port is in PyPI
@@ -14,6 +16,15 @@ else:
 setup(
     name="pdfparanoia",
     version="0.0.14",
+
+packages = [
+    "pdfparanoia",
+    "pdfparanoia.plugins",
+]
+
+setup(
+    name="pdfparanoia",
+    version=pdfparanoia.__version__,
     url="https://github.com/kanzure/pdfparanoia",
     license="BSD",
     author="Bryan Bishop",
@@ -23,6 +34,7 @@ setup(
     description="pdf watermark remover library for academic papers",
     long_description=long_description,
     install_requires=dependencies,
+    packages=packages,
     scripts=["bin/pdfparanoia"],
     platforms="any",
     zip_safe=False,
