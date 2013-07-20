@@ -36,7 +36,7 @@ class AmericanInstituteOfPhysics(Plugin):
 
             if hasattr(obj, "attrs"):
                 # watermarks tend to be in FlateDecode elements
-                if obj.attrs.has_key("Filter") and str(obj.attrs["Filter"]) == "/FlateDecode":
+                if "Filter" in obj.attrs and str(obj.attrs["Filter"]) == "/FlateDecode":
                     length = obj.attrs["Length"]
 
                     # the watermark is never very long
@@ -45,7 +45,7 @@ class AmericanInstituteOfPhysics(Plugin):
                         data = copy(obj.get_data())
 
                         phrase="Redistribution subject to AIP license or copyright"
-                        if phrase in data:
+                        if phrase in str(data):
                             if verbose >= 2:
                                 sys.stderr.write("%s: Found object %s with %r: %r; omitting..." % (cls.__name__, objid, phrase, data))
                             elif verbose >= 1:
