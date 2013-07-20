@@ -7,7 +7,10 @@ Deals with the existential nature of parsing pdfs.
 
 """
 
-from StringIO import StringIO
+try:
+    from StringIO import StringIO
+except ImportError: # py3k
+    from io import StringIO, BytesIO
 
 # Maybe one day pdfquery will be able to save pdf.
 # from pdfquery import PDFQuery
