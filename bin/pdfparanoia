@@ -12,7 +12,11 @@ if __name__ == "__main__":
     import sys
     import pdfparanoia
     import argparse
-    from StringIO import StringIO
+
+    try:
+        from StringIO import StringIO
+    except ImportError:
+        from io import StringIO, BytesIO
 
     ArgP = argparse.ArgumentParser(description="pdfparanoia is a PDF watermark removal library for academic papers. Some publishers include private information like institution names, personal names, ip addresses, timestamps and other identifying information in watermarks on each page.")
     ArgP.add_argument('in_pdf', nargs='?', type=argparse.FileType('rb'),
