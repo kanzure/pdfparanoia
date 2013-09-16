@@ -13,10 +13,6 @@ if platform.python_version() >= "3.0.0":
 else:
     dependencies = ["pdfminer>=0"]
 
-setup(
-    name="pdfparanoia",
-    version="0.0.14",
-
 packages = [
     "pdfparanoia",
     "pdfparanoia.plugins",
