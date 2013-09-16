@@ -17,8 +17,8 @@ usage:
 """
 
 __title__ = "pdfparanoia"
-__version__ = "0.0.13"
-__build__ = 0x000013
+__version__ = "0.0.15"
+__build__ = 0x000015
 __author__ = "Bryan Bishop <kanzure@gmail.com>"
 __license__ = "BSD"
 __copyright__ = "Copyright 2013 Bryan Bishop"
