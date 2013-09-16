@@ -37,7 +37,7 @@ class ScienceMagazine(Plugin):
             obj = pdf.getobj(objid)
 
             if hasattr(obj, "attrs"):
-                if "Width" in obj.attrs) and str(obj.attrs["Width"]) == "432":
+                if ("Width" in obj.attrs) and str(obj.attrs["Width"]) == "432":
                     if "Height" in obj.attrs and str(obj.attrs["Height"]) == "230":
                         evil_ids.append(objid)
 
