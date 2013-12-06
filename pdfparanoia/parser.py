@@ -16,6 +16,7 @@ except ImportError: # py3k
 # from pdfquery import PDFQuery
 
 import pdfminer.pdfparser
+import pdfminer.pdfdocument
 
 from .eraser import replace_object_with
 
@@ -28,9 +29,7 @@ def parse_pdf(handler):
 
     # setup for parsing
     parser = pdfminer.pdfparser.PDFParser(handler)
-    doc = pdfminer.pdfparser.PDFDocument()
-    parser.set_document(doc)
-    doc.set_parser(parser)
+    doc = pdfminer.pdfdocument.PDFDocument(parser)
 
     # actual parsing
     doc.initialize()
@@ -58,8 +57,7 @@ def deflate(content):
     pdf = parse_content(content)
 
     # get a list of all object ids
-    xrefs = pdf._parser.read_xref()
-    xref = xrefs[0]
+    xref = pdf.xrefs[0]
     objids = xref.get_objids()
 
     # store new replacements

@@ -11,7 +11,7 @@ long_description = open(os.path.join(os.path.dirname(__file__), "README.md")).re
 if platform.python_version() >= "3.0.0":
     dependencies = ["pdfminer3k>=1.3.0"]
 else:
-    dependencies = ["pdfminer>=0"]
+    dependencies = ["pdfminer>=20131113"]
 
 packages = [
     "pdfparanoia",
