@@ -10,6 +10,8 @@ from ..eraser import (
 )
 from ..plugin import Plugin
 
+from pdfminer.pdftypes import PDFObjectNotFound
+
 class JSTOR(Plugin):
     """
     JSTOR
@@ -50,48 +52,51 @@ class JSTOR(Plugin):
         # check each object in the pdf
         for objid in objids:
             # get an object by id
-            obj = pdf.getobj(objid)
+            try:
+                obj = pdf.getobj(objid)
 
-            if hasattr(obj, "attrs"):
-                if obj.attrs.has_key("Filter") and str(obj.attrs["Filter"]) == "/FlateDecode":
-                    data = copy(obj.get_data())
+                if hasattr(obj, "attrs"):
+                    if obj.attrs.has_key("Filter") and str(obj.attrs["Filter"]) == "/FlateDecode":
+                        data = copy(obj.get_data())
 
-                    # make sure all of the requirements are in there
-                    if all([requirement in data for requirement in JSTOR.requirements]):
-                        better_content = data
+                        # make sure all of the requirements are in there
+                        if all([requirement in data for requirement in JSTOR.requirements]):
+                            better_content = data
 
-                        # remove the date
-                        startpos = better_content.find("This content downloaded ")
-                        endpos = better_content.find(")", startpos)
-                        segment = better_content[startpos:endpos]
-                        if verbose >= 2 and replacements:
-                            sys.stderr.write("%s: Found object %s with %r: %r; omitting..." % (cls.__name__, objid, cls.requirements, segment))
-
-                        better_content = better_content.replace(segment, "")
-
-                        # it looks like all of the watermarks are at the end?
-                        better_content = better_content[:-160]
-
-                        # "Accessed on dd/mm/yyy hh:mm"
-                        #
-                        # the "Accessed" line is only on the first page
-                        #
-                        # it's based on /F2
-                        #
-                        # This would be better if it could be decoded to
-                        # actually search for the "Accessed" text.
-                        if page_id == 0 and "/F2 11 Tf\n" in better_content:
-                            startpos = better_content.rfind("/F2 11 Tf\n")
-                            endpos = better_content.find("Tf\n", startpos+5)
-
+                            # remove the date
+                            startpos = better_content.find("This content downloaded ")
+                            endpos = better_content.find(")", startpos)
+                            segment = better_content[startpos:endpos]
                             if verbose >= 2 and replacements:
-                                sys.stderr.write("%s: Found object %s with %r: %r; omitting..." % (cls.__name__, objid, cls.requirements, better_content[startpos:endpos]))
+                                sys.stderr.write("%s: Found object %s with %r: %r; omitting..." % (cls.__name__, objid, cls.requirements, segment))
 
-                            better_content = better_content[0:startpos] + better_content[endpos:]
+                            better_content = better_content.replace(segment, "")
 
-                        replacements.append([objid, better_content])
+                            # it looks like all of the watermarks are at the end?
+                            better_content = better_content[:-160]
 
-                        page_id += 1
+                            # "Accessed on dd/mm/yyy hh:mm"
+                            #
+                            # the "Accessed" line is only on the first page
+                            #
+                            # it's based on /F2
+                            #
+                            # This would be better if it could be decoded to
+                            # actually search for the "Accessed" text.
+                            if page_id == 0 and "/F2 11 Tf\n" in better_content:
+                                startpos = better_content.rfind("/F2 11 Tf\n")
+                                endpos = better_content.find("Tf\n", startpos+5)
+
+                                if verbose >= 2 and replacements:
+                                    sys.stderr.write("%s: Found object %s with %r: %r; omitting..." % (cls.__name__, objid, cls.requirements, better_content[startpos:endpos]))
+
+                                better_content = better_content[0:startpos] + better_content[endpos:]
+
+                            replacements.append([objid, better_content])
+
+                            page_id += 1
+            except PDFObjectNotFound, e:
+                print >>sys.stderr, 'Missing object: %r' % e
 
         if verbose >= 1 and replacements:
             sys.stderr.write("%s: Found objects %s with %r; omitting..." % (cls.__name__, [deets[0] for deets in replacements], cls.requirements))
