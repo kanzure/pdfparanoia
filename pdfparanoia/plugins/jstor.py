@@ -44,8 +44,7 @@ class JSTOR(Plugin):
         pdf = parse_content(content)
 
         # get a list of all object ids
-        xrefs = pdf._parser.read_xref()
-        xref = xrefs[0]
+        xref = pdf.xrefs[0]
         objids = xref.get_objids()
 
         # check each object in the pdf
