@@ -17,11 +17,11 @@ usage:
 """
 
 __title__ = "pdfparanoia"
-__version__ = "0.0.15"
-__build__ = 0x000015
+__version__ = "0.0.16"
+__build__ = 0x000016
 __author__ = "Bryan Bishop <kanzure@gmail.com>"
 __license__ = "BSD"
-__copyright__ = "Copyright 2013 Bryan Bishop"
+__copyright__ = "Copyright 2016 Bryan Bishop"
 
 from . import utils
 from .core import scrub
