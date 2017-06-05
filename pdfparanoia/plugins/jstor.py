@@ -95,7 +95,7 @@ class JSTOR(Plugin):
                             replacements.append([objid, better_content])
 
                             page_id += 1
-            except PDFObjectNotFound, e:
+            except PDFObjectNotFound as e:
                 print >>sys.stderr, 'Missing object: %r' % e
 
         if verbose >= 1 and replacements:
