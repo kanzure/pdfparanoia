@@ -29,6 +29,7 @@ setup(
     maintainer_email="kanzure@gmail.com",
     description="pdf watermark remover library for academic papers",
     long_description=long_description,
+    long_description_content_type="text/markdown",
     install_requires=dependencies,
     packages=packages,
     scripts=["bin/pdfparanoia"],
