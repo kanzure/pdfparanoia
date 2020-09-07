@@ -1,7 +1,7 @@
 SHELL := /bin/bash
 
 test:
-	nosetests-2.7 -s --verbosity=2
+	nosetests -s --verbosity=2
 
 clean:
 	rm -fr build dist
