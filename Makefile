@@ -10,8 +10,8 @@ clean:
 	find . -name *.swp -exec rm {} \;
 
 install:
-	python2.7 setup.py install
+	python3 setup.py install
 
 upload: clean
-	python2.7 setup.py sdist upload
+	python3 setup.py sdist upload
 
