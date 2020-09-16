@@ -31,9 +31,6 @@ def parse_pdf(handler):
     parser = pdfminer.pdfparser.PDFParser(handler)
     doc = pdfminer.pdfdocument.PDFDocument(parser)
 
-    # actual parsing
-    doc.initialize()
-
     return doc
 
 def parse_content(content):
