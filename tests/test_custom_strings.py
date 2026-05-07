@@ -163,6 +163,28 @@ class CustomStringsPluginTestCase(unittest.TestCase):
         )
         self.assertTrue(output.startswith(b"%PDF"))
 
+    # -- case sensitivity -----------------------------------------------------
+
+    def test_scrub_case_insensitive_default(self):
+        """Case-insensitive matching is on by default; lower-case target hits."""
+        content = self._raw_content()
+        # "korea" (all lower-case) should still find and remove "Korea" / "korea"
+        output = pdfparanoia.plugins.CustomStrings.scrub(
+            content, scrub_strings=[KOREA_LITERAL.lower()]
+        )
+        self.assertFalse(_string_in_any_stream(output, KOREA_LITERAL))
+
+    def test_scrub_case_sensitive_no_match_on_wrong_case(self):
+        """Case-sensitive matching does NOT remove a differently-cased target."""
+        content = self._raw_content()
+        output = pdfparanoia.plugins.CustomStrings.scrub(
+            content,
+            scrub_strings=[KOREA_LITERAL.lower()],  # "korea" won't hit "Korea"
+            scrub_strings_case_sensitive=True,
+        )
+        # The contiguous "Korea" occurrence must still be present.
+        self.assertTrue(_string_in_any_stream(output, KOREA_LITERAL))
+
 
 # ---------------------------------------------------------------------------
 # CLI tests

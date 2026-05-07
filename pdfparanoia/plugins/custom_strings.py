@@ -10,6 +10,9 @@ Usage::
 
     pdfparanoia.scrub(fh, scrub_strings=["Downloaded by user@example.com",
                                           "131.252.130.248"])
+    # Case-sensitive (default is case-insensitive):
+    pdfparanoia.scrub(fh, scrub_strings=["Korea"],
+                      scrub_strings_case_sensitive=True)
 
 Implementation notes:
 
@@ -47,11 +50,18 @@ class CustomStrings(Plugin):
         if not scrub_strings:
             return content
 
+        # By default matching is case-insensitive.  Pass
+        # scrub_strings_case_sensitive=True to disable.
+        case_sensitive = kwargs.get("scrub_strings_case_sensitive", False)
+        re_flags = 0 if case_sensitive else re.IGNORECASE
+
         # Normalise targets to bytes (latin-1 round-trips all 256 byte values).
         targets = [
             s.encode("latin-1") if isinstance(s, str) else s
             for s in scrub_strings
         ]
+        # Pre-compile one pattern per target.
+        patterns = [re.compile(re.escape(t), re_flags) for t in targets]
 
         pieces = []
         last_end = 0
@@ -69,18 +79,19 @@ class CustomStrings(Plugin):
 
             modified = decompressed
             hit = False
-            for target in targets:
-                if target in modified:
+            for target, pattern in zip(targets, patterns):
+                if pattern.search(modified):
                     if verbose:
                         sys.stderr.write(
-                            "%s: removing %r from stream at offset %d\n"
+                            "%s: removing %r (case_%s) from stream at offset %d\n"
                             % (
                                 cls.__name__,
                                 target.decode("latin-1", errors="replace"),
+                                "sensitive" if case_sensitive else "insensitive",
                                 m.start(),
                             )
                         )
-                    modified = modified.replace(target, b"")
+                    modified = pattern.sub(b"", modified)
                     hit = True
 
             if not hit:

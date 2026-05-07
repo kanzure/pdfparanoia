@@ -31,7 +31,10 @@ if __name__ == "__main__":
     ArgP.add_argument("-s", "--scrub-strings", action="append", default=[],
                       metavar="STRING",
                       help="Additional literal string to remove from all FlateDecode streams. "
-                           "May be specified multiple times.")
+                           "May be specified multiple times.  Matching is case-insensitive "
+                           "unless --case-sensitive is also given.")
+    ArgP.add_argument("--case-sensitive", action="store_true", default=False,
+                      help="Make --scrub-strings matching case-sensitive (default: case-insensitive).")
     Args = ArgP.parse_args()
 
     verbose = 0
@@ -48,7 +51,8 @@ if __name__ == "__main__":
         fh = StringIO(raw)
 
     outputcontent = pdfparanoia.scrub(fh, verbose=verbose,
-                                      scrub_strings=Args.scrub_strings or None)
+                                      scrub_strings=Args.scrub_strings or None,
+                                      scrub_strings_case_sensitive=Args.case_sensitive)
 
     # Write binary output.  When -o is not given, argparse.FileType('wb')
     # with default='-' returns sys.stdout.buffer in Python 3.
