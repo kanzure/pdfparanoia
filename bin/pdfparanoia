@@ -36,6 +36,11 @@ if __name__ == "__main__":
                            "unless --case-sensitive is also given.")
     ArgP.add_argument("--case-sensitive", action="store_true", default=False,
                       help="Make --scrub-strings matching case-sensitive (default: case-insensitive).")
+    ArgP.add_argument("--only-scrub-metadata", action="store_true", default=False,
+                      help="Limit --scrub-strings to XMP and DocInfo metadata only; "
+                           "leave page content streams untouched.  Useful when you "
+                           "want to remove a short substring (e.g. an institution name) "
+                           "only from metadata without touching rendered page text.")
     Args = ArgP.parse_args()
 
     verbose = 0
@@ -54,6 +59,9 @@ if __name__ == "__main__":
     outputcontent = pdfparanoia.scrub(fh, verbose=verbose,
                                       scrub_strings=Args.scrub_strings or None,
                                       scrub_strings_case_sensitive=Args.case_sensitive)
+
+                                      scrub_strings_case_sensitive=Args.case_sensitive,
+                                      scrub_strings_metadata_only=Args.only_scrub_metadata)
 
     # Open the output only after the input has been fully read and processed,
     # so that -o /same/file as input is safe (no premature truncation).

@@ -7,11 +7,14 @@ import pdfparanoia
 
 long_description = open(os.path.join(os.path.dirname(__file__), "README.md")).read()
 
-# pdfminer isn't cross-version compatible but a py3k port is in PyPI
+# pdfminer is still required by publisher plugins (aip, ieee, jstor, rsc).
+# pdfminer.six is the actively-maintained Python 3 fork.
+# pikepdf is required by the CustomStrings plugin for TJ-aware content-stream
+# and metadata scrubbing.
 if platform.python_version() >= "3.0.0":
-    dependencies = ["pdfminer3k>=1.3.0"]
+    dependencies = ["pdfminer.six", "pikepdf"]
 else:
-    dependencies = ["pdfminer>=20131113"]
+    dependencies = ["pdfminer>=20131113", "pikepdf"]
 
 packages = [
     "pdfparanoia",

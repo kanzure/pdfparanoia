@@ -24,9 +24,9 @@ or,
 sudo python setup.py install
 ```
 
-pdfparanoia is written for python2.7+ or python 3.
-You will also need to manually install "pdfminer" if you do not use pip to install pdfparanoia.
-For python versions prior to Python 3, use "pdfminer" from the Python Package Index (http://pypi.python.org). For recent versions of Python, use pdfminer3k instead.
+pdfparanoia is written for Python 2.7+ or Python 3.
+Dependencies are installed automatically by pip: **pdfminer.six** (publisher
+watermark plugins) and **pikepdf** (custom string + metadata scrubbing).
 
 ## Usage
 
@@ -51,6 +51,22 @@ and,
 cat input.pdf | pdfparanoia > output.pdf
 ```
 
+To remove a specific string from all page content streams *and* metadata:
+
+``` bash
+pdfparanoia input.pdf -s "Downloaded by user@example.com" -o output.pdf
+```
+
+To remove a string from metadata only (leaving page text untouched):
+
+``` bash
+pdfparanoia input.pdf -s "My Institution" --only-scrub-metadata -o output.pdf
+```
+
+Multiple `-s` flags can be combined, and matching is case-insensitive by default
+(pass `--case-sensitive` to opt out).  The `-o` flag is safe to use with the
+same path as the input file.
+
 ## Supported
 
 * AIP
@@ -61,6 +77,7 @@ cat input.pdf | pdfparanoia > output.pdf
 
 ## Changelog
 
+* 0.0.18 - pikepdf-based CustomStrings plugin: TJ-kerning-aware content-stream scrubbing, XMP and DocInfo metadata scrubbing, `--scrub-strings` / `--only-scrub-metadata` CLI flags, safe in-place `-o` output.
 * 0.0.13 - RSC
 * 0.0.12 - SPIE
 * 0.0.11 - pdfparanoia command-line interface. Use it by either piping in pdf data, or specifying a path to a pdf in the first argv slot.
