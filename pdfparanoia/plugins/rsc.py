@@ -22,7 +22,7 @@ class RoyalSocietyOfChemistry(Plugin):
     """
         
     @classmethod
-    def scrub(cls, content, verbose=0):
+    def scrub(cls, content, verbose=0, **kwargs):
         replacements = []
         
         # List of watermark strings to remove
@@ -36,7 +36,8 @@ class RoyalSocietyOfChemistry(Plugin):
         ]
 
         # Confirm the PDF is from the RSC
-        if "pubs.rsc.org" in content:
+        needle = b"pubs.rsc.org" if isinstance(content, bytes) else "pubs.rsc.org"
+        if needle in content:
             
             # parse the pdf into a pdfminer document
             pdf = parse_content(content)

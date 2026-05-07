@@ -8,6 +8,7 @@ Scrubbing machines. Bubbles mandatory.
 """
 
 from .aip import *
+from .custom_strings import *
 from .ieee import *
 from .jstor import *
 from .rsc import *
