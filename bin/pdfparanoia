@@ -22,8 +22,9 @@ if __name__ == "__main__":
     ArgP = argparse.ArgumentParser(description="pdfparanoia is a PDF watermark removal library for academic papers. Some publishers include private information like institution names, personal names, ip addresses, timestamps and other identifying information in watermarks on each page.")
     ArgP.add_argument('in_pdf', nargs='?', type=argparse.FileType('rb'),
                         default='-') # argparse.FileType interprets "-" as Stdin.
-    ArgP.add_argument("-o", "--output", type=argparse.FileType('wb'),
-                        default='-')
+    ArgP.add_argument("-o", "--output", default=None, metavar="FILE",
+                      help="Output file path.  Defaults to stdout.  "
+                           "Safe to use the same path as the input file.")
     ArgP.add_argument("-v", "--verbose", action="store_true", default=False,
                       help="Output more information, which may be sensitive or excessive.")
     ArgP.add_argument("-V", "--more-verbose", action="store_true", default=False,
@@ -54,9 +55,12 @@ if __name__ == "__main__":
                                       scrub_strings=Args.scrub_strings or None,
                                       scrub_strings_case_sensitive=Args.case_sensitive)
 
-    # Write binary output.  When -o is not given, argparse.FileType('wb')
-    # with default='-' returns sys.stdout.buffer in Python 3.
-    Args.output.write(outputcontent)
-    if Args.output not in (sys.stdout, getattr(sys.stdout, 'buffer', None)):
-        Args.output.close()
+    # Open the output only after the input has been fully read and processed,
+    # so that -o /same/file as input is safe (no premature truncation).
+    if Args.output is None:
+        out_fh = getattr(sys.stdout, 'buffer', sys.stdout)
+        out_fh.write(outputcontent)
+    else:
+        with open(Args.output, 'wb') as out_fh:
+            out_fh.write(outputcontent)
 
