@@ -36,7 +36,7 @@ class JSTOR(Plugin):
     ]
 
     @classmethod
-    def scrub(cls, content, verbose=0):
+    def scrub(cls, content, verbose=0, **kwargs):
         replacements = []
 
         # jstor has certain watermarks only on the first page
@@ -56,7 +56,7 @@ class JSTOR(Plugin):
                 obj = pdf.getobj(objid)
 
                 if hasattr(obj, "attrs"):
-                    if obj.attrs.has_key("Filter") and str(obj.attrs["Filter"]) == "/FlateDecode":
+                    if "Filter" in obj.attrs and str(obj.attrs["Filter"]) == "/FlateDecode":
                         data = copy(obj.get_data())
 
                         # make sure all of the requirements are in there

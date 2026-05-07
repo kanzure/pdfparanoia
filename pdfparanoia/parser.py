@@ -31,8 +31,9 @@ def parse_pdf(handler):
     parser = pdfminer.pdfparser.PDFParser(handler)
     doc = pdfminer.pdfdocument.PDFDocument(parser)
 
-    # actual parsing
-    doc.initialize()
+    # doc.initialize() was removed in pdfminer.six >= 20200402; skip it.
+    if hasattr(doc, 'initialize'):
+        doc.initialize()
 
     return doc
 
@@ -41,7 +42,14 @@ def parse_content(content):
     Parses a PDF via pdfminer from a string. There are some problems with
     pdfminer accepting StringIO objects, so this is a temporary hack.
     """
-    stream = StringIO(content)
+    # pdfminer requires a binary stream; use BytesIO for bytes content.
+    if isinstance(content, bytes):
+        try:
+            stream = BytesIO(content)
+        except NameError:
+            stream = StringIO(content)  # Python 2 fallback
+    else:
+        stream = StringIO(content)
     return parse_pdf(stream)
 
 def deflate(content):

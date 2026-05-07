@@ -32,9 +32,13 @@ def find_plugins():
     plugins = [each[1] for each in plugins]
     return plugins
 
-def scrub(obj, verbose=False):
+def scrub(obj, verbose=False, **kwargs):
     """
     Removes watermarks from a pdf and returns the resulting pdf as a string.
+
+    Extra keyword arguments are forwarded to every plugin's scrub() method.
+    For example, pass scrub_strings=["Downloaded by", "user@example.com"] to
+    remove arbitrary substrings from all FlateDecode streams.
     """
     # reset the file handler
     if hasattr(obj, "seek"):
@@ -50,7 +54,7 @@ def scrub(obj, verbose=False):
 
     # clean this pdf as much as possible
     for plugin in plugins:
-        content = plugin.scrub(content, verbose=verbose)
+        content = plugin.scrub(content, verbose=verbose, **kwargs)
 
     return content
 

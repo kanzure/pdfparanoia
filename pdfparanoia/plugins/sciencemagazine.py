@@ -20,7 +20,7 @@ class ScienceMagazine(Plugin):
     # that server.
 
     @classmethod
-    def scrub(cls, content, verbose=0):
+    def scrub(cls, content, verbose=0, **kwargs):
         evil_ids = []
 
         # parse the pdf into a pdfminer document

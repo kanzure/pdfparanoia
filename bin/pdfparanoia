@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
 pdfparanoia - pdf watermark removal tool
@@ -15,28 +15,44 @@ if __name__ == "__main__":
 
     try:
         from StringIO import StringIO
+        BytesIO = StringIO  # Python 2: str == bytes
     except ImportError:
-        from io import StringIO, BytesIO
+        from io import BytesIO  # Python 3
 
     ArgP = argparse.ArgumentParser(description="pdfparanoia is a PDF watermark removal library for academic papers. Some publishers include private information like institution names, personal names, ip addresses, timestamps and other identifying information in watermarks on each page.")
     ArgP.add_argument('in_pdf', nargs='?', type=argparse.FileType('rb'),
                         default='-') # argparse.FileType interprets "-" as Stdin.
     ArgP.add_argument("-o", "--output", type=argparse.FileType('wb'),
-                        default=sys.stdout)
+                        default='-')
     ArgP.add_argument("-v", "--verbose", action="store_true", default=False,
                       help="Output more information, which may be sensitive or excessive.")
     ArgP.add_argument("-V", "--more-verbose", action="store_true", default=False,
                       help="Output even more information. Implies -v.")
+    ArgP.add_argument("-s", "--scrub-strings", action="append", default=[],
+                      metavar="STRING",
+                      help="Additional literal string to remove from all FlateDecode streams. "
+                           "May be specified multiple times.")
     Args = ArgP.parse_args()
 
     verbose = 0
     if Args.verbose: verbose = 1
     if Args.more_verbose: verbose = 2
 
-    # I really don't like having to read a file only to cast as StringIO, but seems
-    # necessary to get reading from StdIn to play nicely with pdfparanoia.
-    outputcontent = pdfparanoia.scrub(StringIO(Args.in_pdf.read()), verbose=verbose)
+    # Wrap the raw bytes in a BytesIO so pdfparanoia.scrub() can seek it.
+    # (In Python 2 str==bytes so StringIO works; in Python 3 we need BytesIO.)
+    raw = Args.in_pdf.read()
     Args.in_pdf.close()
+    try:
+        fh = BytesIO(raw)
+    except Exception:
+        fh = StringIO(raw)
+
+    outputcontent = pdfparanoia.scrub(fh, verbose=verbose,
+                                      scrub_strings=Args.scrub_strings or None)
+
+    # Write binary output.  When -o is not given, argparse.FileType('wb')
+    # with default='-' returns sys.stdout.buffer in Python 3.
     Args.output.write(outputcontent)
-    if Args.output != sys.stdout:
+    if Args.output not in (sys.stdout, getattr(sys.stdout, 'buffer', None)):
         Args.output.close()
+
